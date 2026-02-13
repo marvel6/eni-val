@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import './App.css'
+
+const UNLOCK_AUDIO_SRC = '/background.mp3'
 import blessing1 from './assets/blessing-1.png'
 import blessing2 from './assets/blessing-2.png'
 import blessing3 from './assets/blessing-3.png'
@@ -19,12 +21,20 @@ import firstMeetup from './assets/first-meetup.png'
 import funnyPicOfMe from './assets/funny-pic-of-me.png'
 import blackDress2 from './assets/black-dress-2.png'
 import angryFace from './assets/angry-face.png'
+import coupleRestaurant from './assets/couple-restaurant.png'
+import coupleSelfie1 from './assets/couple-selfie-1.png'
+import coupleMirror from './assets/couple-mirror.png'
+import coupleLockscreen from './assets/couple-lockscreen.png'
+import coupleOutdoor1 from './assets/couple-outdoor-1.png'
+import coupleOutdoor2 from './assets/couple-outdoor-2.png'
+import coupleOutdoor3 from './assets/couple-outdoor-3.png'
 
 function App() {
   const [petNameInput, setPetNameInput] = useState('')
   const [isAllowed, setIsAllowed] = useState(false)
   const [hasTried, setHasTried] = useState(false)
   const [showTraits, setShowTraits] = useState(false)
+  const audioRef = useRef(null)
 
   // You can tweak this text if you want to update the time together later
   const timeTogether = '2 years and 3 months'
@@ -78,12 +88,25 @@ function App() {
     const cleaned = petNameInput.trim().toLowerCase()
     setHasTried(true)
     if (cleaned === 'eni') {
+      const el = audioRef.current
+      if (el) {
+        el.volume = 1
+        el.currentTime = 0
+        const p = el.play()
+        if (p && typeof p.then === 'function') p.catch(() => {})
+      }
       setIsAllowed(true)
     }
   }
 
   return (
     <div className="page">
+      <audio
+        ref={audioRef}
+        src={UNLOCK_AUDIO_SRC}
+        preload="auto"
+        style={{ display: 'none' }}
+      />
       {!isAllowed && (
         <div className="gate-overlay">
           <div className="gate-card">
@@ -240,6 +263,43 @@ function App() {
             <figure className="gallery-card">
               <img src={funnyPicOfMe} alt="A funny picture of me you like" />
               <figcaption>The funny pic of you.</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section className="section">
+          <h2>More of us</h2>
+          <p className="section-intro">
+            Date vibes, mirror selfies, and every moment we decided to capture together.
+          </p>
+          <div className="gallery-grid">
+            <figure className="gallery-card">
+              <img src={coupleRestaurant} alt="Us at a restaurant or cafe" />
+              <figcaption>Date night — you in that black dress, me trying to play it cool.</figcaption>
+            </figure>
+            <figure className="gallery-card">
+              <img src={coupleSelfie1} alt="Close-up selfie of us" />
+              <figcaption>That smile and that kissy face. Still my favorite duo.</figcaption>
+            </figure>
+            <figure className="gallery-card">
+              <img src={coupleMirror} alt="Mirror selfie together" />
+              <figcaption>Mirror selfie season. You and the cats shirt, me and the bonnet.</figcaption>
+            </figure>
+            <figure className="gallery-card">
+              <img src={coupleLockscreen} alt="Us on a lockscreen" />
+              <figcaption>When you made us the lockscreen. I still smile every time.</figcaption>
+            </figure>
+            <figure className="gallery-card">
+              <img src={coupleOutdoor1} alt="Us outdoors" />
+              <figcaption>Outdoor vibes — you in teal, me in stripes. Just us.</figcaption>
+            </figure>
+            <figure className="gallery-card">
+              <img src={coupleOutdoor2} alt="Us outside with hijab and jacket" />
+              <figcaption>You in your hijab and florals, me in the beige jacket. Our era.</figcaption>
+            </figure>
+            <figure className="gallery-card">
+              <img src={coupleOutdoor3} alt="Us outside in the sun" />
+              <figcaption>Same day, same us. Sun, grass, and your arm around me.</figcaption>
             </figure>
           </div>
         </section>
